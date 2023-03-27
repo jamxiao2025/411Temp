@@ -1,0 +1,9 @@
+Proposal 1: MusicGO
+Don't you hate it when you've reached your destination but still have songs waiting in your queue? Will you stay in your car or save the playlist for later? Use MusicGo and get an auto-generated playlist that suits your mood, music tastes, and travel time to accompany you in your journey. 
+Two APIs used for the project will be Spotify and a navigation API. Some navigation APIs we are considering are googleMaps, openroute service, and Mapbox. 
+
+Propsal 2: YourBuddy 
+YourBuddy helps users to lift their mood by creating a space where they can rant without judgement. In response to a bad day or a bad situation, YourBuddy will first reply with encouraging and sympthatetic words and then reccomend some uplifting songs. 
+Two APIs used for this project would be Spotify and ChatGPT. 
+
+Our team have decided to do proposal 1: MusicGo.
