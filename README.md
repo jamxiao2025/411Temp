@@ -2,7 +2,7 @@
 411 Project: Topic - TBD
 Members: Andrew Hu, Min Sung (Milo) Park, Kathlyn Sinaga, James Xiao
 
-*We had some issues storing our code in a folder called prototype so our prototype code is in the folder named "spotigo"
+*We had some issues storing our code in a folder called prototype so our prototype code is in the folder named "spotigo"*
 Installation & Setup Instructions:
 1) Make sure you have node installed
 2) Go into the spotigo directory and type in the command line "npm install". This should install all the dependencies
