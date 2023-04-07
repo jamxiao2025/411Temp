@@ -2,6 +2,8 @@ const express = require('express');
 const axios = require('axios');
 const cors = require('cors');
 const app = express();
+require('dotenv').config();
+
 
 app.use(express.json());
 app.use(cors());
@@ -11,6 +13,7 @@ app.get('/api/distance', async (req, res) => {
   const dep = encodeURIComponent(departure);
   const arr = encodeURIComponent(arrival);
   const apiKey = process.env.GOOGLE_MAPS_API_KEY; // Replace with your own Google Maps API key
+  console.log(apiKey)
   const apiUrl = `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${dep}&destinations=${arr}&units=imperial&key=${apiKey}`;
 
   try {
