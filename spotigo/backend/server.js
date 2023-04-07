@@ -11,7 +11,7 @@ app.get('/api/distance', async (req, res) => {
   const dep = encodeURIComponent(departure);
   const arr = encodeURIComponent(arrival);
   const apiKey = process.env.GOOGLE_MAPS_API_KEY; // Replace with your own Google Maps API key
-  const apiUrl = `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${dep}&destinations=${arr}&units=imperial&key=AIzaSyDDoBX9_pQJn4UfCl3dyFaxW8loq4RZxww`;
+  const apiUrl = `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${dep}&destinations=${arr}&units=imperial&key=${apiKey}`;
 
   try {
     const response = await axios.get(apiUrl);
