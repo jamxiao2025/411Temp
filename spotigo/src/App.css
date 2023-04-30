@@ -36,3 +36,64 @@
     transform: rotate(360deg);
   }
 }
+
+.spotifyLogin {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.appContainer {
+  padding-top: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  padding: 15px;
+}
+
+.genreContainer {
+  padding: 15px 0px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  align-items: left;
+}
+
+.basic-multi-select {
+  width: 100%;
+}
+
+.input {
+  margin-left: 5px;
+  margin-right: 10px;
+  outline: 1px solid black;
+  border-radius: 3px;
+}
+
+.songs {
+  margin-top: 20px;
+  width: 60%;
+}
+
+.songCard {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 5px 0px;
+  padding: 10px;
+  background-color: #f0f0f0;
+  border-radius: 5px;
+}
+
+.songDesc {
+  margin-left: 10px;
+}

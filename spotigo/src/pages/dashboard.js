@@ -1,21 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import {GoogleMap, useLoadScript, Marker} from '@react-google-maps/api';
-import SpotifyWebApi from 'spotify-web-api-node';
 import axios from 'axios';
-import dist from '@chakra-ui/icon';
+import {Button} from '@chakra-ui/react';
 import useAuth from './useAuth';
 import DisplayTrack from './displayTrack';
 import Select from 'react-select';
 
-const spotifyApi = new SpotifyWebApi({
-  clientId: process.env.REACT_APP_SPOTIFY_CLIENT_ID
-})
-
 
 function Dashboard({ code }) {
   const accessToken = useAuth(code);
-
+  
   const [name, setName] = useState("");
   const [departure, setDeparture] = useState("");
   const [arrival, setArrival] = useState("");
@@ -24,13 +19,14 @@ function Dashboard({ code }) {
   const [durationTime, setDurationTime] = useState(0);
   const [tracks, setTracks] = useState([]);
   const [genreOptions, setgenreOptions] = useState();
-  const [selectedGenres, setSelectedGenres] = useState([]);
+  const [selectedGenres, setSelectedGenres] = useState(['acoustic']);
+  const [email, setEmail] = useState("");
+  const [plength, setPlength] = useState(0);
 
   useEffect(() => {
     if (!accessToken) return;
-    spotifyApi.setAccessToken(accessToken);
   }, [accessToken]);
-
+  
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
@@ -50,7 +46,9 @@ function Dashboard({ code }) {
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/firebase.User
         const uid = user.uid;
-        setName(uid)
+        const email = user.email;
+        setName(uid);
+        setEmail(email);
         // ...
       } else {
         // User is signed out
@@ -62,18 +60,19 @@ function Dashboard({ code }) {
   useEffect(() => {
     if (!accessToken) return;
 
-    spotifyApi.getAvailableGenreSeeds()
-    .then(data => {
-      const genreSeeds = data.body.genres;
-      setgenreOptions(genreSeeds.map(genre => ({label: [genre], value: [genre]})));
-    })
-    .catch(err => {
-      console.log('Something went wrong!', err);
-    });
+    axios.get('http://localhost:8080/spotifyCalls/available-genre-seeds', { 'headers': { 'token': accessToken } } )
+      .then(res => {
+        const data = res.data;
+        const genreSeeds = data.body.genres;
+        setgenreOptions(genreSeeds.map(genre => ({label: [genre], value: [genre]})));
+      })
+      .catch(err => {
+        console.log('Something went wrong!', err);
+      });
+    
   }, [accessToken]);
 
   function findSongs(querySize) {
-    console.log(selectedGenres);
     if (!durationTime) {
       window.alert("Please Enter a Route!");
       return
@@ -83,15 +82,10 @@ function Dashboard({ code }) {
       window.alert("Please Select a Genre!");
       return;
     }
-
-    spotifyApi.getRecommendations({
-      limit: querySize,
-      // min_energy: 0.4,
-      seed_genres: selectedGenres,
-      // min_popularity: 10
-    })
+    
+    axios.get(`http://localhost:8080/spotifyCalls/getrecommendations`, { headers: { 'token': accessToken, 'querysize': querySize, 'selectedGenres': selectedGenres } })
     .then(res => {
-      const data = res.body.tracks;
+      const data = res.data.body.tracks;
       let playlist = [];
       let pLength = 0;
       
@@ -121,6 +115,7 @@ function Dashboard({ code }) {
           }
         })
       );
+      setPlength(pLength);
     })
     .catch(err => console.log("Something went wrong!", err));
   }
@@ -129,37 +124,59 @@ function Dashboard({ code }) {
     setSelectedGenres(e.map(genre => genre.value[0]));
   }
 
+  function convertMS(ms) {
+    let d, h, m, s;
+    s = Math.floor(ms / 1000);
+    m = Math.floor(s / 60);
+    s = s % 60;
+    h = Math.floor(m / 60);
+    m = m % 60;
+    d = Math.floor(h / 24);
+    h = h % 24;
+    h += d * 24;
+
+    return  (h ? h + 'h ' : '') +  (h ? m + 'm ' : '') +  (m ? s + 's' : 's')
+}
+
   return (
-    <div>
-      <h1>Hi {name}</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Departure:
-          <input type="text" value={departure} onChange={(e) => setDeparture(e.target.value)} />
-        </label>
-        <label>
-          Arrival:
-          <input type="text" value={arrival} onChange={(e) => setArrival(e.target.value)} />
-        </label>
-        <button type="submit">Submit</button>
-      </form>
-      <h1>Distance:{distance}</h1>
-      <h1>Duration:{duration}</h1>
-      <h1>Genre</h1>
-      <Select
-        isMulti
-        name="genres"
-        options={genreOptions}
-        className="basic-multi-select"
-        classNamePrefix="select"
-        onChange={e => handleGenreSelect(e)}
-      />
-      <button onClick={() => findSongs(20)}>Find Songs</button>
-      <div style={{overflowy: 'auto'}}>
+    <div className='appContainer'>
+      <h1>Hi {email}</h1>
+      <div className='formContainer'>
+        <form onSubmit={handleSubmit}>
+          <label>
+            Departure:
+            <input type="text" value={departure} onChange={(e) => setDeparture(e.target.value)} className="input"/>
+          </label>
+          <label>
+            Arrival:
+            <input type="text" value={arrival} onChange={(e) => setArrival(e.target.value)} className="input"/>
+          </label>
+          <button type="submit">Submit</button>
+        </form>
+        <h1>Distance:{distance}</h1>
+        <h1>Duration:{duration}</h1>
+        <div className='genreContainer'>
+          <Select
+            placeholder="Select Genres"
+            isMulti
+            name="genres"
+            options={genreOptions}
+            className="basic-multi-select"
+            classNamePrefix="select"
+            onChange={e => handleGenreSelect(e)}
+            />
+        </div>
+      </div>
+      <Button onClick={() => findSongs(20)} colorScheme="green" size="md">Find Songs</Button>
+      {tracks.length > 0 && <div style={{overflowy: 'auto'}} className="songs">
+          <div className='trackInfo'>
+            <div className='numSongs'>Number of songs: {tracks.length}</div>
+            <div className='plength'>Playlist Length: {convertMS(plength)}</div>
+          </div>
             {tracks.map(track => (
                 <DisplayTrack track={track} key={track.uri}/>
             ))}
-      </div>
+      </div>}
     </div>
   );
 }

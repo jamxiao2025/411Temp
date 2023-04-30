@@ -9,8 +9,14 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-const spotifyClientId = process.env.SPOTIFY_CLIENT_ID
-const spotifyClientSecret = process.env.SPOTIFY_CLIENT_SECRET
+const spotifyClientId = process.env.SPOTIFY_CLIENT_ID;
+const spotifyClientSecret = process.env.SPOTIFY_CLIENT_SECRET;
+
+//Routes
+const spotifyCalls = require('./routes/spotifyCalls');
+
+//middleware
+app.use('/spotifyCalls', spotifyCalls);
 
 app.post('/spotify/refresh', (req, res) => {
     const refreshToken = req.body.refreshToken;
@@ -42,7 +48,7 @@ app.post('/spotify/login', (req, res) => {
         clientId: spotifyClientId,
         clientSecret: spotifyClientSecret
     });
-    console.log(code);
+    // console.log(code);
     spotifyApi.authorizationCodeGrant(code)
     .then(data => {
         res.json({
@@ -61,7 +67,7 @@ app.get('/api/distance', async (req, res) => {
   const dep = encodeURIComponent(departure);
   const arr = encodeURIComponent(arrival);
   const apiKey = process.env.GOOGLE_MAPS_API_KEY; // Replace with your own Google Maps API key
-  console.log(apiKey)
+//   console.log(apiKey)
   const apiUrl = `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${dep}&destinations=${arr}&units=imperial&key=${apiKey}`;
 
   try {
