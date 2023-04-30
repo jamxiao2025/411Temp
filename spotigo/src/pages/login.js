@@ -3,6 +3,7 @@ import React from 'react'
 import {Formik, Field} from "formik"
 import {auth} from '../firebase'
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 
 function Login(){
@@ -21,6 +22,14 @@ function Login(){
             const errorMessage = error.message;
         });
     };
+
+    const signInWithGoogle = () => {
+        const provider = new GoogleAuthProvider();
+        const auth = getAuth();
+        signInWithPopup(auth, provider);
+    }
+
+
   return (
     <Flex bg="gray.100" align="center" justify="center" h="100vh">
     <Box bg="white" p={6} rounded="md" w={64}>
@@ -79,7 +88,12 @@ function Login(){
             </VStack>
           </form>
         )}
-      </Formik>
+              </Formik>
+
+      <button onClick={signInWithGoogle} >
+        Sign in with Google
+       </button>
+
     </Box>
   </Flex>
   )
