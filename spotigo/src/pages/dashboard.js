@@ -135,7 +135,7 @@ function Dashboard({ code }) {
     h = h % 24;
     h += d * 24;
 
-    return  (h ? h + 'h ' : '') +  (h ? m + 'm ' : '') +  (m ? s + 's' : 's')
+    return  (h ? h + 'h ' : '') +  (h || m ? m + 'm ' : '') +  (m || s ? s + 's' : 's')
 }
 
   return (
@@ -153,8 +153,8 @@ function Dashboard({ code }) {
           </label>
           <button type="submit">Submit</button>
         </form>
-        <h1>Distance:{distance}</h1>
-        <h1>Duration:{duration}</h1>
+        <h1>Distance: {distance}</h1>
+        <h1>Duration: {duration}</h1>
         <div className='genreContainer'>
           <Select
             placeholder="Select Genres"
