@@ -13,6 +13,7 @@ function Dashboard() {
     event.preventDefault();
     try {
       const response = await axios.get(`http://localhost:8080/api/distance?departure=${departure}&arrival=${arrival}`);
+      console.log(response)
       setDistance(response.data.rows[0].elements[0].distance.text)
       setDuration(response.data.rows[0].elements[0].duration.text)
     } catch (error) {
@@ -37,9 +38,9 @@ function Dashboard() {
   }, []);
 
   return (
-    <div>
-      <h1>Hi {name}</h1>
-      <form onSubmit={handleSubmit}>
+    <div className="container">
+      <h1 className="title">Welcome to Music Go!</h1>
+      <form onSubmit={handleSubmit} className="form">
         <label>
           Departure:
           <input type="text" value={departure} onChange={(e) => setDeparture(e.target.value)} />
@@ -50,8 +51,13 @@ function Dashboard() {
         </label>
         <button type="submit">Submit</button>
       </form>
-      <h1>Distance:{distance}</h1>
-      <h1>Duration:{duration}</h1>
+      {distance && duration && (
+        <>
+          <h2 className="subtitle">Results:</h2>
+          <p>Distance: {distance}</p>
+          <p>Duration: {duration}</p>
+        </>
+      )}
     </div>
   );
 }
