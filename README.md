@@ -1,7 +1,8 @@
-# MusicGo
-411 Project: Topic - TBD
+# Spotigo
+411 Project: Topic - Creating Playlists for Trip Durations
 Members: Andrew Hu, Min Sung (Milo) Park, Kathlyn Sinaga, James Xiao
 
+The official branch for this project is spotify-branch NOT main.
 We had some issues storing our code in a folder called prototype so our prototype code is in the folder named "spotigo"
 
 Installation & Setup Instructions:
@@ -11,8 +12,7 @@ Installation & Setup Instructions:
 4) In the backend folder run "node server.js"
 5) In the spotigo folder run "npm start"
 
-DEMO VIDEO:
+LINK TO DEMO VIDEO: https://drive.google.com/file/d/1blclOBxUqdxu8aECFnWQBgQYMByf5xjK/view?usp=sharing
 
 
-https://user-images.githubusercontent.com/95207937/230682165-004f47f5-b552-4a06-b55b-31c9b09781ac.mov
 
