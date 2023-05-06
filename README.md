@@ -1,6 +1,11 @@
 # Spotigo
-411 Project: Topic - Creating Playlists for Trip Durations
+411 Project: Topic - Creating Playlists for Trip Durations 
 Members: Andrew Hu, Min Sung (Milo) Park, Kathlyn Sinaga, James Xiao
+
+The Tech Stack is in the docs folder but here's a brief overview: 
+Frontend - React
+Backend- Firebase
+OAuth - Spotify OAuth
 
 The official branch for this project is spotify-branch NOT main.
 We had some issues storing our code in a folder called prototype so our prototype code is in the folder named "spotigo"
