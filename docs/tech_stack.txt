@@ -1,4 +1,5 @@
 The tech stack that we are using consists of React.js, Firebase, and Node.js
-We decided to use React.js for our frontend because its what we're most comfortable with.
-We decided to use Firebase to handle user CRUD operations. Since Firebase is a BAAS, it comes with functions that support OAuth and other user authorization protocls.
-We decided to use Node.js to handle our API calls to Google Maps DistanceMatrix API and Spotify API.
+We decided to use React.js for our frontend because its what we're most comfortable with. React features an extension of the JavaScript language syntax, and it has extensive documentation online. It provides reusable components that help in making the UI. 
+We decided to use Firebase to handle user CRUD operations. Since Firebase is a BAAS, it significantly helps with backend tasks. Additionally, it comes with functions that support OAuth and other user authorization protocols. 
+We decided to use Node.js to handle our API calls to Google Maps DistanceMatrix API and Spotify API. We used Node.js because it allows us to use JavaScript on both the frontend and backend. It also allows us to download code packages through NPM, which simplifies managing app dependencies. 
+Using React.js, Firebase, and Node.js allows for smooth and simplified development. 
