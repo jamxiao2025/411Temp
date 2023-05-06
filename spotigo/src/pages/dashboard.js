@@ -6,11 +6,14 @@ import {Button} from '@chakra-ui/react';
 import useAuth from './useAuth';
 import DisplayTrack from './displayTrack';
 import Select from 'react-select';
-
+import { db } from "../firebase";
+import { doc, setDoc } from "firebase/firestore"; 
+import { FieldValue } from 'firebase/firestore';
+import {   collection, where, query, getDocs, limit, getFirestore, getDoc} from "firebase/firestore"; 
 
 function Dashboard({ code }) {
   const accessToken = useAuth(code);
-  
+  const firestore = getFirestore();
   const [name, setName] = useState("");
   const [departure, setDeparture] = useState("");
   const [arrival, setArrival] = useState("");
@@ -22,6 +25,8 @@ function Dashboard({ code }) {
   const [selectedGenres, setSelectedGenres] = useState(['acoustic']);
   const [email, setEmail] = useState("");
   const [plength, setPlength] = useState(0);
+  const [trip, setTrip] = useState("")
+  const auth = getAuth();
 
   useEffect(() => {
     if (!accessToken) return;
@@ -37,24 +42,44 @@ function Dashboard({ code }) {
     } catch (error) {
       console.error(error);
     }
+    const auth = getAuth();
+    if (auth.currentUser) {
+      // add topics to user's thing
+      // Send API call to Firebase with selectedTopics array
+      // Example API call using fetch:
+      event.preventDefault();
+      const userRef = doc(db, "users", auth.currentUser.uid);
+      // Add topics array to user profile in Firestore
+      setDoc(userRef, {email: auth.currentUser.email, trips: `${departure} to ${arrival}` }, { merge: true })
+        .then(() => {
+          console.log("Succesfully added trip");
+        })
+        .catch((error) => {
+          alert(error.message);
+        });
+    } else {
+      // If the user is not authenticated, prompt them to log in
+      alert("Please log in to add trips.");
+    }
   }
 
   useEffect(() => {
-    const auth = getAuth();
-    onAuthStateChanged(auth, (user) => {
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
-        // User is signed in, see docs for a list of available properties
-        // https://firebase.google.com/docs/reference/js/firebase.User
-        const uid = user.uid;
-        const email = user.email;
-        setName(uid);
-        setEmail(email);
-        // ...
+        setEmail(user.email);
+        const userDocRef = doc(firestore, "users", user.uid);
+        const userDoc = await getDoc(userDocRef);
+        if (userDoc.exists()) {
+          setTrip(userDoc.data().trips);
+        } else {
+          setTrip("no trips recently..");
+        }
       } else {
-        // User is signed out
-        // ...
+        setTrip(null);
       }
+      return unsubscribe;
     });
+
   }, []);
 
   useEffect(() => {
@@ -141,6 +166,7 @@ function Dashboard({ code }) {
   return (
     <div className='appContainer'>
       <h1>Hi {email}</h1>
+      <h1>Your most recent trip: {trip}</h1>
       <div className='formContainer'>
         <form onSubmit={handleSubmit}>
           <label>
